@@ -27,13 +27,6 @@ A modern Kanban board with drag-and-drop, offline protection, and smooth UI feed
 
 ---
 
-## 🔌 Offline Handling
-
-Listens to browser `online`/`offline` events:
-- ❌ Blocks drag, add, delete actions
-- 🎨 Desaturates UI
-- 💬 Shows toast: "Connection lost: Action disabled"
-
 **Implementation:** Guard clause in `handleDragEnd` checks `isOnline` before any state mutations.
 
 ---
