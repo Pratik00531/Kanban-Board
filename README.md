@@ -2,6 +2,8 @@
 
 A modern Kanban board with drag-and-drop, offline protection, and smooth UI feedback.
 
+![Kanban Demo](./demo.gif)
+
 ---
 
 ## ✨ Features
