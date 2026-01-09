@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 Kanban Board - Recruitment Pipeline
 
-## Getting Started
+A modern Kanban board with drag-and-drop, offline protection, and smooth UI feedback.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- 🎯 **Drag & Drop** – Tasks within/across columns, reorder columns
+- 🎨 **Color-Coded** – 8-color soft palette with curved accents
+- 🔌 **Offline Guard** – All actions blocked when offline + toast alerts
+- ✅ **Completion Feedback** – Sound + green checkmark on last column
+- ➕ **Add/Remove** – Tasks and columns on the fly
+
+---
+
+## 🛠️ Tech Stack
+
+| Library | Why? |
+|---------|------|
+| **Zustand** | Minimal state management (~1KB), granular selectors |
+| **@dnd-kit** | Modern drag-and-drop with accessibility |
+| **Next.js 15** | App Router, React 19, TypeScript |
+| **Tailwind CSS** | Utility-first styling with custom animations |
+
+---
+
+## 🔌 Offline Handling
+
+Listens to browser `online`/`offline` events:
+- ❌ Blocks drag, add, delete actions
+- 🎨 Desaturates UI
+- 💬 Shows toast: "Connection lost: Action disabled"
+
+**Implementation:** Guard clause in `handleDragEnd` checks `isOnline` before any state mutations.
+
+---
+
+## 📐 Data Structure
+
+```typescript
+tasks: Record<string, Task>      // O(1) lookup by ID
+columns: Record<string, Column>  // O(1) access
+columnOrder: string[]            // Explicit ordering
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Why Records?** O(1) performance vs O(n) with arrays - scales to 1000+ tasks.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Setup
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
