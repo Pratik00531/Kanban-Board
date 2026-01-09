@@ -1,12 +1,5 @@
 import { create } from "zustand"
 
-/**
- * WHY Zustand?
- * - Global state without boilerplate
- * - Fine-grained subscriptions (performance)
- * - Easy to reason about for interviews
- */
-
 type Task = {
   id: string
   title: string
@@ -23,8 +16,15 @@ type KanbanStore = {
   columns: Record<string, Column>
   columnOrder: string[]
   isOnline: boolean
-  setOnline: (online: boolean) => void
+  setOnline: (status: boolean) => void
 
+  // 👇 REQUIRED for drag & drop
+  moveTask: (
+    fromColumnId: string,
+    toColumnId: string,
+    fromIndex: number,
+    toIndex: number
+  ) => void
 }
 
 export const useKanbanStore = create<KanbanStore>((set) => ({
@@ -32,6 +32,7 @@ export const useKanbanStore = create<KanbanStore>((set) => ({
     "task-1": { id: "task-1", title: "Beatrice Barista" },
     "task-2": { id: "task-2", title: "Rita Roastinghouse" },
   },
+
   columns: {
     "col-1": {
       id: "col-1",
@@ -49,7 +50,40 @@ export const useKanbanStore = create<KanbanStore>((set) => ({
       taskIds: [],
     },
   },
+
   columnOrder: ["col-1", "col-2", "col-3"],
   isOnline: true,
-   setOnline: (status) => set({ isOnline: status }),
+
+  setOnline: (status) => set({ isOnline: status }),
+
+  /**
+   * WHY this exists:
+   * - Centralized immutable state update
+   * - Handles reorder & cross-column move
+   */
+  moveTask: (fromCol, toCol, fromIndex, toIndex) =>
+    set((state) => {
+      const sourceTaskIds = [...state.columns[fromCol].taskIds]
+      const destinationTaskIds =
+        fromCol === toCol
+          ? sourceTaskIds
+          : [...state.columns[toCol].taskIds]
+
+      const [movedTask] = sourceTaskIds.splice(fromIndex, 1)
+      destinationTaskIds.splice(toIndex, 0, movedTask)
+
+      return {
+        columns: {
+          ...state.columns,
+          [fromCol]: {
+            ...state.columns[fromCol],
+            taskIds: sourceTaskIds,
+          },
+          [toCol]: {
+            ...state.columns[toCol],
+            taskIds: destinationTaskIds,
+          },
+        },
+      }
+    }),
 }))
