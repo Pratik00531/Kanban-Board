@@ -38,17 +38,6 @@ Listens to browser `online`/`offline` events:
 
 ---
 
-## 📐 Data Structure
-
-```typescript
-tasks: Record<string, Task>      // O(1) lookup by ID
-columns: Record<string, Column>  // O(1) access
-columnOrder: string[]            // Explicit ordering
-```
-
-**Why Records?** O(1) performance vs O(n) with arrays - scales to 1000+ tasks.
-
----
 
 ## 📦 Setup
 
